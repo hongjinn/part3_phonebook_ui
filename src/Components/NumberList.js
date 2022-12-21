@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+const api_base_url = "http://localhost:3001/numbers"
+
 const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_numbers, set_message }) => {
   return (
     <ul
@@ -48,16 +50,40 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
       "phone": modify_phone
     }
 
-    set_numbers(numbers.map(number => number.id === number_to_modify.id ? modified_number : number))
+    fetch(`${api_base_url}/${modified_number.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(modified_number)
+    })
+    .then(response => {
+      if (response.ok === true) {
+        console.log(`Successfully added ${modified_number.name} to server`)
+        return response.json()
+      } else {
+        set_message('WARNING: Issue with the server')
+        setTimeout(() => {
+          set_message('')
+        }, 1000)
+        throw new Error(`Something went wrong with POST request ${response.status}`)
+      }
+    })      
+    .then(data => {
+      set_numbers(numbers.map(number => number.id === number_to_modify.id ? modified_number : number))
 
-    set_message(`SUCCESS: Modified ${modified_number.name}`)
-    setTimeout(() => {
-      set_message('')
-    }, 1000)
+      set_message(`SUCCESS: Modified ${modified_number.name}`)
+      setTimeout(() => {
+        set_message('')
+      }, 1000)
+  
+      set_modify_name('')
+      set_modify_phone('')
+      set_modify_mode(false)
+    })
+    .catch(error => console.log(error))
+    
 
-    set_modify_name('')
-    set_modify_phone('')
-    set_modify_mode(false)
 
   }
 

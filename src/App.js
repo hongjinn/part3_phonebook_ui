@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import NumberList from './Components/NumberList.js'
 import NewContact from './Components/NewContact.js'
 import Message from './Components/Message.js'
+import Search from './Components/Search.js'
 
-const api_base_url = "http://localhost:3001"
+const api_base_url = "http://localhost:3001/numbers"
 
 const App = () => {
 
@@ -20,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     console.log("Getting numbers from server for the first time")
-    fetch(`${api_base_url}/numbers`, {
+    fetch(`${api_base_url}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=UTF-8'
@@ -41,6 +42,7 @@ const App = () => {
     .catch(error => console.log(error))
   }, [])
   
+
   const handle_new_number = (e) => {
     e.preventDefault()
     console.log(`User wants to add new number`)
@@ -55,25 +57,63 @@ const App = () => {
       "phone": new_phone
     }
 
-    set_numbers(numbers.concat(number_to_add))
-
-    set_new_name('')
-    set_new_phone('')
-
-    set_message(`SUCCESS: Added ${number_to_add.name}`)
-    setTimeout(() => {
-      set_message('')
-    }, 1000)
+    fetch(api_base_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(number_to_add)
+    })
+    .then(response => {
+      if (response.ok === true) {
+        console.log(`Successfully added ${number_to_add.name} to server`)
+        return response.json()
+      } else {
+        set_message('WARNING: Issue with the server')
+        setTimeout(() => {
+          set_message('')
+        }, 1000)
+        throw new Error(`Something went wrong with POST request ${response.status}`)
+      }
+    })
+    .then(data => {
+      console.log(data)
+      set_numbers(numbers.concat(data))
+      set_new_name('')
+      set_new_phone('')
+  
+      set_message(`SUCCESS: Added ${number_to_add.name}`)
+      setTimeout(() => {
+        set_message('')
+      }, 1000)
+    })
+    .catch(error => console.log(error))
 
   }
 
+
   const handle_delete_number = (number_to_delete) => {
     console.log(`User wants to delete id: ${number_to_delete.id}`)
-    set_numbers(numbers.filter(number => number.id !== number_to_delete.id))
-    set_message(`SUCCESS: Deleted ${number_to_delete.name}`)
-    setTimeout(() => {
-      set_message('')
-    }, 1000)
+
+    fetch(`${api_base_url}/${number_to_delete.id}`, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      if (response.ok === true) {
+        set_numbers(numbers.filter(number => number.id !== number_to_delete.id))
+        set_message(`SUCCESS: Deleted ${number_to_delete.name}`)
+        setTimeout(() => {
+          set_message('')
+        }, 1000)
+      } else {
+        set_message('WARNING: Issue with the server')
+        setTimeout(() => {
+          set_message('')
+        }, 1000)
+        throw new Error(`Something went wrong with POST request ${response.status}`)        
+      }
+    })
+    .catch(error => console.log(error))
 
   }
   
@@ -91,20 +131,11 @@ const App = () => {
         message={message}
       />
 
-
       Search
-      <input
-        style={{margin: '5px'}}
-        value={search_term}
-        onChange={(e) => set_search_term(e.target.value)}
+      <Search
+        search_term={search_term}
+        set_search_term={set_search_term}
       />
-
-      <button
-        onClick={() => set_search_term('')}
-      >
-        Clear
-      </button>
-
 
       <h2>Add a new contact</h2>
       <NewContact 

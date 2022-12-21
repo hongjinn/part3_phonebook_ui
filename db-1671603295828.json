@@ -21,19 +21,14 @@
       "phone": "39-23-64231"
     },
     {
+      "id": 5,
+      "name": "Beyonce",
+      "phone": "783-213-2222"
+    },
+    {
       "id": 6,
-      "name": "Mike X Jones",
+      "name": "Mike Jones",
       "phone": "281 330 8004"
-    },
-    {
-      "id": 7,
-      "name": "Beyonce Knowles",
-      "phone": "911 31"
-    },
-    {
-      "id": 8,
-      "name": "good times",
-      "phone": "497 11"
     }
   ]
 }
