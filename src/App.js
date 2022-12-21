@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import NumberList from './Components/NumberList.js'
+import NewContact from './Components/NewContact.js'
 
 const api_base_url = "http://localhost:3001"
 
@@ -88,38 +89,20 @@ const App = () => {
 
 
       <h2>Add a new contact</h2>
-      <form
-        onSubmit={handle_new_number}
-        style={{border: 'solid 1px green', margin: '5px', padding: '5px', width:'350px'}}
-      >
-
-        <div>
-          Name
-          <input
-            style={{margin: '5px', width:'252px'}}
-            value={new_name}
-            onChange={(e) => set_new_name(e.target.value)}
-          />
-        </div>
-
-        <div>
-          Phone
-          <input
-            style={{margin: '5px', width:'250px'}}
-            value={new_phone}
-            onChange={(e) => set_new_phone(e.target.value)}
-          />
-        </div>
-
-        <button>Submit</button>
-
-      </form>
-
+      <NewContact 
+        handle_new_number={handle_new_number}
+        new_name={new_name}
+        set_new_name={set_new_name}
+        new_phone={new_phone}
+        set_new_phone={set_new_phone}
+      />
 
       <h2>Numbers</h2>
       <NumberList
         numbers_to_display={numbers_to_display}
         handle_delete_number={handle_delete_number}
+        set_numbers={set_numbers}
+        numbers={numbers}
       />
 
 
