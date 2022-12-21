@@ -23,7 +23,11 @@ const NewContact = ({ handle_new_number, new_name, set_new_name, new_phone, set_
         />
       </div>
 
-      <button>Submit</button>
+      <button
+        style={{backgroundColor: 'cyan'}}
+      >
+        Submit
+      </button>
     </form>
 
   )

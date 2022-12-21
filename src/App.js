@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import NumberList from './Components/NumberList.js'
 import NewContact from './Components/NewContact.js'
+import Message from './Components/Message.js'
 
 const api_base_url = "http://localhost:3001"
 
 const App = () => {
 
   const [numbers, set_numbers] = useState([])
+  const [message, set_message] = useState('')
   const [new_name, set_new_name] = useState('')
   const [new_phone, set_new_phone] = useState('')
   const [search_term, set_search_term] = useState('')
@@ -58,11 +60,21 @@ const App = () => {
     set_new_name('')
     set_new_phone('')
 
+    set_message(`SUCCESS: Added ${number_to_add.name}`)
+    setTimeout(() => {
+      set_message('')
+    }, 1000)
+
   }
 
-  const handle_delete_number = (id) => {
-    console.log(`User wants to delete id: ${id}`)
-    set_numbers(numbers.filter(number => number.id !== id))
+  const handle_delete_number = (number_to_delete) => {
+    console.log(`User wants to delete id: ${number_to_delete.id}`)
+    set_numbers(numbers.filter(number => number.id !== number_to_delete.id))
+    set_message(`SUCCESS: Deleted ${number_to_delete.name}`)
+    setTimeout(() => {
+      set_message('')
+    }, 1000)
+
   }
   
   const numbers_to_display = numbers.filter(number => {
@@ -70,8 +82,14 @@ const App = () => {
   })
 
   return (
-    <div>
+    <div
+      style={{margin: '10px'}}
+    >
       <h1>Phonebook</h1>
+
+      <Message
+        message={message}
+      />
 
 
       Search
@@ -103,6 +121,7 @@ const App = () => {
         handle_delete_number={handle_delete_number}
         set_numbers={set_numbers}
         numbers={numbers}
+        set_message={set_message}
       />
 
 

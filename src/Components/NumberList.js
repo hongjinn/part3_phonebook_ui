@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_numbers }) => {
+const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_numbers, set_message }) => {
   return (
     <ul
       style={{listStyleType: 'none', fontSize: '20px'}}
@@ -12,13 +12,14 @@ const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_num
           handle_delete_number={handle_delete_number}
           set_numbers={set_numbers}
           numbers={numbers}
+          set_message={set_message}
         />
       })}
     </ul>
   )
 }
 
-const Number = ({ number, handle_delete_number, numbers, set_numbers }) => {
+const Number = ({ number, handle_delete_number, numbers, set_numbers, set_message }) => {
 
   const [ modify_mode, set_modify_mode ] = useState(false)
   const [ modify_name, set_modify_name ] = useState('')
@@ -49,6 +50,11 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers }) => {
 
     set_numbers(numbers.map(number => number.id === number_to_modify.id ? modified_number : number))
 
+    set_message(`SUCCESS: Modified ${modified_number.name}`)
+    setTimeout(() => {
+      set_message('')
+    }, 1000)
+
     set_modify_name('')
     set_modify_phone('')
     set_modify_mode(false)
@@ -60,7 +66,7 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers }) => {
       [{number.id}] {number.name} <span style={{fontWeight: 'bold', color: 'green'}}>@</span> {number.phone}
       <button
         style={{margin: '5px', backgroundColor: 'pink'}}
-        onClick={() => handle_delete_number(number.id)}
+        onClick={() => handle_delete_number(number)}
       >
         Delete
       </button>
@@ -85,6 +91,7 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers }) => {
           set_modify_name={set_modify_name}
           modify_phone={modify_phone}
           set_modify_phone={set_modify_phone}
+          set_modify_mode={set_modify_mode}
         />
         : ''
       }
@@ -92,7 +99,15 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers }) => {
   )
 }
 
-const ModifyContact = ({ handle_modify_number, number_to_modify, modify_name, set_modify_name, modify_phone, set_modify_phone }) => {
+const ModifyContact = ({ 
+  handle_modify_number,
+  number_to_modify,
+  modify_name,
+  set_modify_name,
+  modify_phone,
+  set_modify_phone,
+  set_modify_mode
+}) => {
   return (
     <form
       onSubmit={(e) => handle_modify_number(number_to_modify)(e)}
@@ -117,7 +132,19 @@ const ModifyContact = ({ handle_modify_number, number_to_modify, modify_name, se
         />
       </div>
 
-      <button>Submit</button>
+      <button
+        style={{margin: '5px', backgroundColor: 'cyan'}}
+        type="submit"
+      >
+        Submit
+      </button>
+      <button 
+        type="button"
+        onClick={() => set_modify_mode(false)}
+        style={{backgroundColor: 'orange'}}
+      >
+        Cancel Modify
+      </button>
 
     </form>
   )
