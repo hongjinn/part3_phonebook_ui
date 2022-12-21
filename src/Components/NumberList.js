@@ -1,6 +1,5 @@
 import { useState } from 'react'
-
-const api_base_url = "http://localhost:3001/numbers"
+import phonebookService from '../services/phonebook.js'
 
 const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_numbers, set_message }) => {
   return (
@@ -50,13 +49,7 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
       "phone": modify_phone
     }
 
-    fetch(`${api_base_url}/${modified_number.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify(modified_number)
-    })
+    phonebookService.update_number(modified_number.id, modified_number)
     .then(response => {
       if (response.ok === true) {
         console.log(`Successfully added ${modified_number.name} to server`)
@@ -70,6 +63,7 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
       }
     })      
     .then(data => {
+      console.log(data)
       set_numbers(numbers.map(number => number.id === number_to_modify.id ? modified_number : number))
 
       set_message(`SUCCESS: Modified ${modified_number.name}`)

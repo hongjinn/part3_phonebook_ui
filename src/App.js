@@ -3,6 +3,7 @@ import NumberList from './Components/NumberList.js'
 import NewContact from './Components/NewContact.js'
 import Message from './Components/Message.js'
 import Search from './Components/Search.js'
+import phonebookService from './services/phonebook.js'
 
 const api_base_url = "http://localhost:3001/numbers"
 
@@ -21,12 +22,7 @@ const App = () => {
 
   useEffect(() => {
     console.log("Getting numbers from server for the first time")
-    fetch(`${api_base_url}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
-    })
+    phonebookService.get_all()
     .then(response => {
       if (response.ok === true) {
         console.log(`Successfully hit API`)
@@ -57,13 +53,7 @@ const App = () => {
       "phone": new_phone
     }
 
-    fetch(api_base_url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify(number_to_add)
-    })
+    phonebookService.create_number(number_to_add)
     .then(response => {
       if (response.ok === true) {
         console.log(`Successfully added ${number_to_add.name} to server`)
@@ -95,9 +85,7 @@ const App = () => {
   const handle_delete_number = (number_to_delete) => {
     console.log(`User wants to delete id: ${number_to_delete.id}`)
 
-    fetch(`${api_base_url}/${number_to_delete.id}`, {
-      method: 'DELETE'
-    })
+    phonebookService.delete_number(number_to_delete.id)
     .then(response => {
       if (response.ok === true) {
         set_numbers(numbers.filter(number => number.id !== number_to_delete.id))
