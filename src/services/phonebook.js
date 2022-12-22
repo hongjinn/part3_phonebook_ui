@@ -1,4 +1,4 @@
-const api_base_url = "http://localhost:3001/numbers"
+const api_base_url = "http://localhost:3001/api/numbers"
 
 const get_all = () => {
   return fetch(`${api_base_url}`, {
@@ -26,7 +26,6 @@ const update_number = (id, modified_number) => {
 }
 
 const create_number = (number_to_add) => {
-  console.log('bilbo')
   return fetch(api_base_url, {
     method: 'POST',
     headers: {
