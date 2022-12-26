@@ -24,7 +24,7 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
 
   const [ modify_mode, set_modify_mode ] = useState(false)
   const [ modify_name, set_modify_name ] = useState('')
-  const [ modify_phone, set_modify_phone ] = useState('')
+  const [ modify_number, set_modify_number ] = useState('')
 
   const show_modify_person = (person_to_modify) => {
     console.log(`User opens modify form for id: ${person_to_modify.id} name: ${person_to_modify.name}`)
@@ -32,13 +32,13 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
   
     // Fill out form
     set_modify_name(person_to_modify.name)
-    set_modify_phone(person_to_modify.phone)
+    set_modify_number(person_to_modify.number)
   }
 
   const handle_modify_person = (person_to_modify) => (e) => {
     e.preventDefault()
     console.log(`User want to submit modification for id: ${person_to_modify.id}`)
-    if (modify_name.trim() === '' || modify_phone.trim() === '') {
+    if (modify_name.trim() === '' || modify_number.trim() === '') {
       alert(`Enter both a new name and person before submitting`)
       return false
     }
@@ -46,7 +46,7 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
     const modified_person = {
       "id": person_to_modify.id,
       "name": modify_name,
-      "phone": modify_phone
+      "number": modify_number
     }
 
     phonebookService.update_person(modified_person.id, modified_person)
@@ -72,7 +72,7 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
       }, 1000)
   
       set_modify_name('')
-      set_modify_phone('')
+      set_modify_number('')
       set_modify_mode(false)
     })
     .catch(error => console.log(error))
@@ -83,7 +83,7 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
 
   return (
     <li key={person.id} style={{margin: '5px'}}>
-      [{person.id}] {person.name} <span style={{fontWeight: 'bold', color: 'green'}}>@</span> {person.phone}
+      [{person.id}] {person.name} <span style={{fontWeight: 'bold', color: 'green'}}>@</span> {person.number}
       <button
         style={{margin: '5px', backgroundColor: 'pink'}}
         onClick={() => handle_delete_person(person)}
@@ -109,8 +109,8 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
           person_to_modify={person}
           modify_name={modify_name}
           set_modify_name={set_modify_name}
-          modify_phone={modify_phone}
-          set_modify_phone={set_modify_phone}
+          modify_number={modify_number}
+          set_modify_number={set_modify_number}
           set_modify_mode={set_modify_mode}
         />
         : ''
@@ -124,8 +124,8 @@ const ModifyContact = ({
   person_to_modify,
   modify_name,
   set_modify_name,
-  modify_phone,
-  set_modify_phone,
+  modify_number,
+  set_modify_number,
   set_modify_mode
 }) => {
   return (
@@ -147,8 +147,8 @@ const ModifyContact = ({
         Phone
         <input
           style={{margin: '5px', width:'250px'}}
-          value={modify_phone}
-          onChange={(e) => set_modify_phone(e.target.value)}
+          value={modify_number}
+          onChange={(e) => set_modify_number(e.target.value)}
         />
       </div>
 

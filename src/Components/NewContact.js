@@ -1,4 +1,4 @@
-const NewContact = ({ handle_new_person, new_name, set_new_name, new_phone, set_new_phone }) => {
+const NewContact = ({ handle_new_person, new_name, set_new_name, new_number, set_new_number }) => {
   return (
     <form
       onSubmit={handle_new_person}
@@ -18,8 +18,8 @@ const NewContact = ({ handle_new_person, new_name, set_new_name, new_phone, set_
         Phone
         <input
           style={{margin: '5px', width:'250px'}}
-          value={new_phone}
-          onChange={(e) => set_new_phone(e.target.value)}
+          value={new_number}
+          onChange={(e) => set_new_number(e.target.value)}
         />
       </div>
 
