@@ -5,8 +5,6 @@ import Message from './Components/Message.js'
 import Search from './Components/Search.js'
 import phonebookService from './services/phonebook.js'
 
-const api_base_url = "http://localhost:3001/numbers"
-
 const App = () => {
 
   const [numbers, set_numbers] = useState([])
@@ -143,6 +141,8 @@ const App = () => {
         set_message={set_message}
       />
 
+      <hr />
+      <small>A Full Stack Open exercise</small>
 
     </div>
   )

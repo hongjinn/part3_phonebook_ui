@@ -1,4 +1,4 @@
-const api_base_url = "http://localhost:3001/api/numbers"
+const api_base_url = "/api/numbers"
 
 const get_all = () => {
   return fetch(`${api_base_url}`, {
