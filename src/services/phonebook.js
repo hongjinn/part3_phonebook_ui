@@ -1,4 +1,4 @@
-const api_base_url = "/api/numbers"
+const api_base_url = "/api/persons"
 
 const get_all = () => {
   return fetch(`${api_base_url}`, {
@@ -9,35 +9,35 @@ const get_all = () => {
   })
 }
 
-const delete_number = (id) => {
+const delete_person = (id) => {
   return fetch(`${api_base_url}/${id}`, {
     method: 'DELETE'
   })
 }
 
-const update_number = (id, modified_number) => {
+const update_person = (id, modified_person) => {
   return fetch(`${api_base_url}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8'
     },
-    body: JSON.stringify(modified_number)
+    body: JSON.stringify(modified_person)
   })
 }
 
-const create_number = (number_to_add) => {
+const create_person = (person_to_add) => {
   return fetch(api_base_url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=UTF-8'
     },
-    body: JSON.stringify(number_to_add)
+    body: JSON.stringify(person_to_add)
   })
 }
 
 export default {
     get_all,
-    create_number,
-    update_number,
-    delete_number
+    create_person,
+    update_person,
+    delete_person
 }

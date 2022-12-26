@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import phonebookService from '../services/phonebook.js'
 
-const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_numbers, set_message }) => {
+const PersonList = ({ persons_to_display, handle_delete_person, persons, set_persons, set_message }) => {
   return (
     <ul
       style={{listStyleType: 'none', fontSize: '20px'}}
     >
-      {numbers_to_display.map(number => {
-        return <Number
-          key={number.id}
-          number={number}
-          handle_delete_number={handle_delete_number}
-          set_numbers={set_numbers}
-          numbers={numbers}
+      {persons_to_display.map(person => {
+        return <Person
+          key={person.id}
+          person={person}
+          handle_delete_person={handle_delete_person}
+          set_persons={set_persons}
+          persons={persons}
           set_message={set_message}
         />
       })}
@@ -20,39 +20,39 @@ const NumberList = ({ numbers_to_display, handle_delete_number, numbers, set_num
   )
 }
 
-const Number = ({ number, handle_delete_number, numbers, set_numbers, set_message }) => {
+const Person = ({ person, handle_delete_person, persons, set_persons, set_message }) => {
 
   const [ modify_mode, set_modify_mode ] = useState(false)
   const [ modify_name, set_modify_name ] = useState('')
   const [ modify_phone, set_modify_phone ] = useState('')
 
-  const show_modify_number = (number_to_modify) => {
-    console.log(`User opens modify form for id: ${number_to_modify.id} name: ${number_to_modify.name}`)
+  const show_modify_person = (person_to_modify) => {
+    console.log(`User opens modify form for id: ${person_to_modify.id} name: ${person_to_modify.name}`)
     set_modify_mode(!modify_mode)
   
     // Fill out form
-    set_modify_name(number_to_modify.name)
-    set_modify_phone(number_to_modify.phone)
+    set_modify_name(person_to_modify.name)
+    set_modify_phone(person_to_modify.phone)
   }
 
-  const handle_modify_number = (number_to_modify) => (e) => {
+  const handle_modify_person = (person_to_modify) => (e) => {
     e.preventDefault()
-    console.log(`User want to submit modification for id: ${number_to_modify.id}`)
+    console.log(`User want to submit modification for id: ${person_to_modify.id}`)
     if (modify_name.trim() === '' || modify_phone.trim() === '') {
-      alert(`Enter both a new name and number before submitting`)
+      alert(`Enter both a new name and person before submitting`)
       return false
     }
 
-    const modified_number = {
-      "id": number_to_modify.id,
+    const modified_person = {
+      "id": person_to_modify.id,
       "name": modify_name,
       "phone": modify_phone
     }
 
-    phonebookService.update_number(modified_number.id, modified_number)
+    phonebookService.update_person(modified_person.id, modified_person)
     .then(response => {
       if (response.ok === true) {
-        console.log(`Successfully added ${modified_number.name} to server`)
+        console.log(`Successfully added ${modified_person.name} to server`)
         return response.json()
       } else {
         set_message('WARNING: Issue with the server')
@@ -64,9 +64,9 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
     })      
     .then(data => {
       console.log(data)
-      set_numbers(numbers.map(number => number.id === number_to_modify.id ? modified_number : number))
+      set_persons(persons.map(person => person.id === person_to_modify.id ? modified_person : person))
 
-      set_message(`SUCCESS: Modified ${modified_number.name}`)
+      set_message(`SUCCESS: Modified ${modified_person.name}`)
       setTimeout(() => {
         set_message('')
       }, 1000)
@@ -82,18 +82,18 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
   }
 
   return (
-    <li key={number.id} style={{margin: '5px'}}>
-      [{number.id}] {number.name} <span style={{fontWeight: 'bold', color: 'green'}}>@</span> {number.phone}
+    <li key={person.id} style={{margin: '5px'}}>
+      [{person.id}] {person.name} <span style={{fontWeight: 'bold', color: 'green'}}>@</span> {person.phone}
       <button
         style={{margin: '5px', backgroundColor: 'pink'}}
-        onClick={() => handle_delete_number(number)}
+        onClick={() => handle_delete_person(person)}
       >
         Delete
       </button>
 
       <button
         style={{backgroundColor: 'orange'}}
-        onClick={() => show_modify_number(number)}
+        onClick={() => show_modify_person(person)}
       >
         {
           modify_mode
@@ -105,8 +105,8 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
       {
         modify_mode
         ? <ModifyContact
-          handle_modify_number={handle_modify_number}
-          number_to_modify={number}
+          handle_modify_person={handle_modify_person}
+          person_to_modify={person}
           modify_name={modify_name}
           set_modify_name={set_modify_name}
           modify_phone={modify_phone}
@@ -120,8 +120,8 @@ const Number = ({ number, handle_delete_number, numbers, set_numbers, set_messag
 }
 
 const ModifyContact = ({ 
-  handle_modify_number,
-  number_to_modify,
+  handle_modify_person,
+  person_to_modify,
   modify_name,
   set_modify_name,
   modify_phone,
@@ -130,7 +130,7 @@ const ModifyContact = ({
 }) => {
   return (
     <form
-      onSubmit={(e) => handle_modify_number(number_to_modify)(e)}
+      onSubmit={(e) => handle_modify_person(person_to_modify)(e)}
       style={{border: 'solid 1px green', margin: '5px 5px 25px 10px', padding: '5px 5px 5px 15px', width:'350px'}}
     >
 
@@ -170,4 +170,4 @@ const ModifyContact = ({
   )
 }
 
-export default NumberList
+export default PersonList

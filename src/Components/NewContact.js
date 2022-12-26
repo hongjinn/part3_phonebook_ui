@@ -1,7 +1,7 @@
-const NewContact = ({ handle_new_number, new_name, set_new_name, new_phone, set_new_phone }) => {
+const NewContact = ({ handle_new_person, new_name, set_new_name, new_phone, set_new_phone }) => {
   return (
     <form
-      onSubmit={handle_new_number}
+      onSubmit={handle_new_person}
       style={{border: 'solid 1px green', margin: '5px', padding: '5px', width:'350px'}}
     >
 
