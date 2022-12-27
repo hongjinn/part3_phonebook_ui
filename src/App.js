@@ -40,6 +40,16 @@ const App = () => {
   const handle_new_person = (e) => {
     e.preventDefault()
     console.log(`User wants to add new person`)
+
+    const person_already_exists = persons.find(person => person.name.trim() === new_name.trim())
+    if (person_already_exists) {
+      alert(`That person already exists, searching for them and you can modify their number`)
+      set_search_term(new_name)
+      set_new_name('')
+      set_new_number('')
+      return false
+    }
+
     if (new_name.trim() === '' || new_number.trim() === '') {
       alert(`Enter both a new name and person before submitting`)
       return false
