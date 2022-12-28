@@ -67,11 +67,7 @@ const App = () => {
         console.log(`Successfully added ${person_to_add.name} to server`)
         return response.json()
       } else {
-        set_message('WARNING: Issue with the server')
-        setTimeout(() => {
-          set_message('')
-        }, 1000)
-        throw new Error(`Something went wrong with POST request ${response.status}`)
+        return response.text().then(text => { throw new Error(text)})
       }
     })
     .then(data => {
@@ -85,7 +81,13 @@ const App = () => {
         set_message('')
       }, 1000)
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      set_message(`WARNING: Issue with the server: ${error}`)
+      setTimeout(() => {
+        set_message('')
+      }, 1000)
+      console.log('to browser, the error was:', error)
+    })
 
   }
 

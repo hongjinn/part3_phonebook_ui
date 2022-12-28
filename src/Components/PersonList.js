@@ -55,11 +55,7 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
         console.log(`Successfully added ${modified_person.name} to server`)
         return response.json()
       } else {
-        set_message('WARNING: Issue with the server')
-        setTimeout(() => {
-          set_message('')
-        }, 1000)
-        throw new Error(`Something went wrong with POST request ${response.status}`)
+        return response.text().then(text => { throw new Error(text)})
       }
     })      
     .then(data => {
@@ -75,7 +71,13 @@ const Person = ({ person, handle_delete_person, persons, set_persons, set_messag
       set_modify_number('')
       set_modify_mode(false)
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      set_message(`WARNING: Issue with the server: ${error}`)
+      setTimeout(() => {
+        set_message('')
+      }, 1000)
+      console.log(error)
+    })
     
 
 
